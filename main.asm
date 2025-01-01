@@ -28,6 +28,7 @@
 0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,
 ];
+#define tilemapAddr 0;
 #define vramAddr 0;
 #define ballVec [45,1];
 #define ballVelocity [0,0];
