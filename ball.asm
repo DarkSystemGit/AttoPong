@@ -117,6 +117,7 @@ push %B;
 push %C;
 push %D;
 push %E;
+push %F;
 //move ball to screen center
 read &ballAddr,%B;
 write 152,%B;
@@ -126,8 +127,8 @@ write 112,%B;
 add &ballVec,1;
 mov %A,%B;
 read %B,%A;
-inc %A;
-write %A,%B;
+addf %A,0.75;
+write %F,%B;
 //get rand num
 sys time.new %D;
 sys time.setToCurrent %D;
@@ -143,9 +144,38 @@ sys random.free %A;
 sys randomDistrubution.free %B; 
 //new angle is in %C
 write %C,&ballVec;
+pop %F;
 pop %E;
 pop %D;
 pop %C;
 pop %B;
 pop %A;
+ret;
+doPoints:
+push %A;
+push %B;
+push %C;
+push %F;
+push %H;
+push 0;
+read &ballAddr,%A;
+read %A,%F;
+cmp %F,0;
+jg cmp2;
+pop %A;
+push 1;
+jmp dpeof;
+cmp2:
+cmp %F,320;
+jlt dpeof;
+pop %A;
+push 2;
+dpeof:
+dec %SBP;
+pop %H;
+pop %F;
+pop %C;
+pop %B;
+pop %A;
+inc %SBP;
 ret;

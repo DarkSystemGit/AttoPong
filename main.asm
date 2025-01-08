@@ -6,9 +6,10 @@
 #define tilemapAddr 0;
 #define tilesetAddr 0;
 #define vramAddr 0;
-#define ballVec [0,0];
+#define ballVec [0,0.5];
 #define ballVelocity [0,0];
-#define points [8,9];
+#define points [0,0];
+#define paddles [0,0];
 #define ballAddr 0;
 sys gfx.getVRAMBuffer %B,%A;
 sys mem.fill %B,76800,2;
@@ -23,6 +24,7 @@ sys mem.copy tileset,%B,13;
 sys gfx.tilemap.new %D,0,0,&tilemapData,%B,40,30;
 sys gfx.tilemap.render %D;
 call reset;
+call initPaddles;
 GameLoop:
 sys gfx.windowClosed %A;
 cmp %A,1;
@@ -37,6 +39,9 @@ cmp %A,1;
 jnz GLRest;
 call bounceBall;
 GLRest:
+call renderPaddles;
+call doPoints;
+call writePs;
 call ballVecConvert;
 call addBallVec;
 call renderScores;
