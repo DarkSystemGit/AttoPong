@@ -57,14 +57,17 @@ jmp wpeof;
 initPaddles:
 push %A;
 push %B;
-sys gfx.sprite.new %B,0,104,0,&paddle;
+sys gfx.sprite.new %B,0,112,0,&paddle;
 write %B,&paddleSprites;
+
 sys gfx.sprite.new %B,0,120,0,&paddle;
 add &paddleSprites,1;
 write %B,%A;
-sys gfx.sprite.new %B,304,104,0,&paddle;
+
+sys gfx.sprite.new %B,304,112,0,&paddle;
 add &paddleSprites,2;
 write %B,%A;
+
 sys gfx.sprite.new %B,304,120,0,&paddle;
 add &paddleSprites,3;
 write %B,%A;
@@ -81,10 +84,10 @@ push %E;
 push %F;
 push %H;
 mov 0,%H;
-bp;
 rpLoop:
-cmp %H,3;
+cmp %H,4;
 jz rpeol;
+bp;
 add %H,&paddleSprites;
 read %A,%A;
 inc %A;
@@ -94,8 +97,12 @@ mod %H,2;
 add %F,&paddlePos;
 mov %A,%C;
 //%C=addr of pos
-read %C,%A;
-read %B,%D;
+read %C,%D;
+mod %H,2;
+cmp %F,0;
+jnz add120;
+mov 112,%A;
+rplr:
 add %A,%D;
 write %A,%B;
 dec %B;
@@ -104,10 +111,13 @@ inc %H;
 jmp rpLoop;
 rpeol:
 pop %H;
-push %F;
+pop %F;
 pop %E;
 pop %D;
 pop %C;
 pop %B;
 pop %A;
 ret;
+add120:
+mov 120,%A;
+jmp rplr;
