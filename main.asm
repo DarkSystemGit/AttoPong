@@ -39,6 +39,9 @@ cmp %A,1;
 jnz GLRest;
 call bounceBall;
 GLRest:
+mov 0,%A;
+call paddleBounce;
+call bounceStack;
 call renderPaddles;
 call doPoints;
 call writePs;

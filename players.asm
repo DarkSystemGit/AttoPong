@@ -64,11 +64,11 @@ sys gfx.sprite.new %B,0,120,0,&paddle;
 add &paddleSprites,1;
 write %B,%A;
 
-sys gfx.sprite.new %B,304,112,0,&paddle;
+sys gfx.sprite.new %B,312,112,0,&paddle;
 add &paddleSprites,2;
 write %B,%A;
 
-sys gfx.sprite.new %B,304,120,0,&paddle;
+sys gfx.sprite.new %B,312,120,0,&paddle;
 add &paddleSprites,3;
 write %B,%A;
 pop %A;
@@ -87,13 +87,14 @@ mov 0,%H;
 rpLoop:
 cmp %H,4;
 jz rpeol;
-bp;
+//bp;
 add %H,&paddleSprites;
 read %A,%A;
 inc %A;
 mov %A,%B;
 //%B=sprite y coord addr
-mod %H,2;
+div %H,2;
+sys math.floor %F,%F;
 add %F,&paddlePos;
 mov %A,%C;
 //%C=addr of pos

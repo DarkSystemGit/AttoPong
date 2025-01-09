@@ -1,5 +1,6 @@
 #include <stdlib>;
-
+#define canBounce 1;
+#define bounceang -360;
 addBallVec:
 push %A;
 push %F;
@@ -103,10 +104,16 @@ ret;
 bounceBall:
 push %F;
 push %A;
+read &canBounce,%A;
+cmp %A,0;
+jz eofBB;
 read &ballVec,%F;
-subf %F,360;
-mulf %F,-1;
+read &bounceang,%A;
+addf %A,%F;
+mod %F,360;
+sys math.abs %F,%F;
 write %F,&ballVec;
+eofBB:
 pop %A;
 pop %F;
 ret;
@@ -178,4 +185,73 @@ pop %C;
 pop %B;
 pop %A;
 inc %SBP;
+ret;
+paddleBounce:
+push %A;
+push %B;
+push %C;
+push %D;
+push %F;
+push %H;
+push %A;
+read &ballAddr,%A;
+read %A,%B;
+inc %A;
+read %A,%C;
+//%B=x,%C=y
+cmp %B,8;
+jlt lpcmp;
+cmp %B,310;
+jg rpcmp;
+write 1,&canBounce;
+pbeol:
+dec %SBP;
+pop %H;
+pop %F;
+pop %D;
+pop %C;
+pop %B;
+pop %A;
+inc %SBP;
+ret;
+
+lpcmp:
+read &paddlePos,%A;
+add 112,%A;
+cmp %C,%A;
+jlt pbeol;
+add 16,%A;
+cmp %C,%A;
+jg pbeol;
+pop %A;
+push 1;
+jmp pbeol;
+
+rpcmp:
+add &paddlePos,1;
+read %A,%A;
+add 112,%A;
+cmp %C,%A;
+jlt pbeol;
+add 16,%A;
+cmp %C,%A;
+jg pbeol;
+pop %A;
+push 2;
+jmp pbeol;
+
+bounceStack:
+push %A;
+dec %SBP;
+pop %A;
+inc %SBP;
+cmp %A,0;
+jz bseof;
+write &bounceang,180;
+bp;
+call bounceBall;
+write &bounceang,-360;
+write 0,&canBounce;
+bseof:
+pop %A;
 ret;
