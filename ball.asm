@@ -1,6 +1,6 @@
 #include <stdlib>;
 #define canBounce 1;
-#define bounceang -360;
+#define bounceang 360;
 addBallVec:
 push %A;
 push %F;
@@ -109,7 +109,8 @@ cmp %A,0;
 jz eofBB;
 read &ballVec,%F;
 mulf %F,-1;
-addf %F,180;
+read &bounceang,%A;
+addf %F,%A;
 write %F,&ballVec;
 eofBB:
 pop %A;
@@ -236,7 +237,7 @@ jz bseof;
 write 180,&bounceang;
 //bp;
 call bounceBall;
-write -360,&bounceang;
+write 360,&bounceang;
 write 0,&canBounce;
 bseof:
 pop %A;
