@@ -101,11 +101,11 @@ checkWin:
 push %A;
 read &points,%A;
 cmp %A,10;
-jz onewin;
+jz twowin;
 add 1,&points;
 read %A,%A;
 cmp %A,10;
-jz twowin;
+jz onewin;
 pop %A;
 ret;
 onewin:
