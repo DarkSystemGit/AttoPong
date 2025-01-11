@@ -108,10 +108,8 @@ read &canBounce,%A;
 cmp %A,0;
 jz eofBB;
 read &ballVec,%F;
-read &bounceang,%A;
-addf %A,%F;
-mod %F,360;
-sys math.abs %F,%F;
+mulf %F,-1;
+addf %F,180;
 write %F,&ballVec;
 eofBB:
 pop %A;
@@ -131,24 +129,12 @@ write 152,%B;
 inc %B;
 write 112,%B;
 //inc speed
-add &ballVec,1;
-mov %A,%B;
-read %B,%A;
-addf %A,0.75;
-write %F,%B;
+call accelerationFunc;
 //get rand num
-sys time.new %D;
-sys time.setToCurrent %D;
-sys time.getUnix %D,%E;
-sys time.free %D;
-sys random.new 0,%A;
-sys randomDistrubution.new %B;
-sys random.setSeed %A,%E;
-sys randomDistrubution.setUniform %B,0,360;
-sys random.setDistribution %A,%B;
-sys random.get %A,%C;
-sys random.free %A;
-sys randomDistrubution.free %B; 
+push 0;
+push 360;
+call generateRandomNum;
+pop %C;
 //new angle is in %C
 write %C,&ballVec;
 pop %F;
@@ -247,11 +233,39 @@ pop %A;
 inc %SBP;
 cmp %A,0;
 jz bseof;
-write &bounceang,180;
-bp;
+write 180,&bounceang;
+//bp;
 call bounceBall;
-write &bounceang,-360;
+write -360,&bounceang;
 write 0,&canBounce;
 bseof:
 pop %A;
 ret;
+accelerationFunc:
+push %A;
+push %F;
+push %B;
+add 1,&ballVec;
+read %A,%A;
+cmp %A,0;
+jnz afbody;
+inc %A;
+mov %A,%F;
+jmp afend;
+afbody:
+div %A,7.5;
+cmp %A,5;
+jg subF1;
+afend:
+add 1,&ballVec;
+read %A,%B;
+addf %B,%F;
+write %F,%A;
+pop %B;
+pop %F;
+pop %A;
+ret;
+
+subF1:
+subf 1,%F;
+jmp afend;

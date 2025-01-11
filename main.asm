@@ -11,6 +11,7 @@
 #define points [0,0];
 #define paddles [0,0];
 #define ballAddr 0;
+#define frameCount 0;
 sys gfx.getVRAMBuffer %B,%A;
 sys mem.fill %B,76800,2;
 write %B,&vramAddr;
@@ -26,11 +27,17 @@ sys gfx.tilemap.render %D;
 call reset;
 call initPaddles;
 GameLoop:
+read &frameCount,%A;
+inc %A;
+write %A,&frameCount;
+read &paddlePos,%F;
 sys gfx.windowClosed %A;
 cmp %A,1;
 jz Exit;
 read &vramAddr,%A;
 sys mem.fill %A,76800,2;
+call handleKeys;
+call paddleAI;
 read &ballAddr,%A;
 push %A;
 call ballInBounds;
