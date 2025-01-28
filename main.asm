@@ -17,10 +17,8 @@ call title;
 
 
 init:
-sys gfx.getVRAMBuffer %B,%A;
-sys mem.fill %B,76800,2;
-write %B,&vramAddr;
-sys gfx.new %B;
+sys gfx.fillVRAM 2,320,240,0,0;
+sys gfx.new;
 sys gfx.setPalette &colors;
 sys mem.malloc 512,%B,%A;
 sys mem.copy tileset,%B,32;
@@ -41,8 +39,7 @@ read &paddlePos,%F;
 sys gfx.windowClosed %A;
 cmp %A,1;
 jz Exit;
-read &vramAddr,%A;
-sys mem.fill %A,76800,2;
+sys gfx.fillVRAM 2,320,240,0,0;
 call handleKeys;
 call paddleAI;
 read &ballAddr,%A;
@@ -67,6 +64,7 @@ sys gfx.tilemap.blit %D;
 sys gfx.sprite.render %C;
 sys gfx.render;
 call checkWin;
+//bp;
 jmp GameLoop;
 Exit:
 exit;
@@ -74,8 +72,7 @@ Win:
 mov 0,%A;
 mov 0,%B;
 mov 0,%C;
-read &vramAddr,%A;
-sys mem.fill %A,76800,2;
+sys gfx.fillVRAM 2,320,240,0,0;
 read &tilesetAddr,%A;
 sys gfx.tilemap.new %B,0,0,&winTM,%A,40,30;
 pop %A;
